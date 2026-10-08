@@ -8,76 +8,246 @@
   </head>
   <body>
     <div class="app-shell">
-      <header class="topbar">
-        <div>
-          <p class="eyebrow">Reservation System</p>
-          <h1>音楽室予約サイト</h1>
-        </div>
-        <div class="badge">1バンドあたり2枠まで</div>
-      </header>
-
-      <main class="layout">
-        <section class="panel form-panel">
-          <h2>新規予約</h2>
-
-          <form id="reservation-form">
-            <div class="field">
-              <label for="band-name">バンド名</label>
-              <input id="band-name" name="band-name" type="text" placeholder="例: Sunset Echo" required />
-            </div>
-
-            <div class="field-row">
+      <!-- ログイン画面 -->
+      <div id="login-screen" class="screen active">
+        <div class="login-container">
+          <div class="login-box">
+            <h1>音楽室予約システム</h1>
+            <p class="login-subtitle">管理者ログイン</p>
+            
+            <form id="login-form">
               <div class="field">
-                <label for="room">音楽室</label>
-                <select id="room" name="room" required>
+                <label for="login-id">学籍番号</label>
+                <input id="login-id" type="text" placeholder="T225107" required />
+              </div>
+              <div class="field">
+                <label for="login-password">パスワード</label>
+                <input id="login-password" type="password" placeholder="••••••••" required />
+              </div>
+              <button type="submit" class="primary-btn">ログイン</button>
+            </form>
+            <p id="login-message" class="message" aria-live="polite"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 管理者ダッシュボード -->
+      <div id="admin-screen" class="screen">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Admin Panel</p>
+            <h1>管理者ダッシュボード</h1>
+          </div>
+          <button id="logout-btn" class="logout-btn">ログアウト</button>
+        </header>
+
+        <div class="admin-layout">
+          <nav class="admin-nav">
+            <button class="nav-btn active" data-tab="dashboard">ダッシュボード</button>
+            <button class="nav-btn" data-tab="time-settings">時間帯設定</button>
+            <button class="nav-btn" data-tab="admins">管理者管理</button>
+            <button class="nav-btn" data-tab="users">ユーザー認証</button>
+            <button class="nav-btn" data-tab="bookings">予約管理</button>
+          </nav>
+
+          <main class="admin-content">
+            <!-- ダッシュボード -->
+            <section id="dashboard-tab" class="tab-content active">
+              <div class="panel">
+                <h2>ダッシュボード</h2>
+                <div class="stats-grid">
+                  <div class="stat-card">
+                    <div class="stat-label">総予約数</div>
+                    <div class="stat-value" id="total-bookings">0</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-label">登録管理者数</div>
+                    <div class="stat-value" id="total-admins">0</div>
+                  </div>
+                  <div class="stat-card">
+                    <div class="stat-label">登録ユーザー数</div>
+                    <div class="stat-value" id="total-users">0</div>
+                  </div>
+                </div>
+                <p id="current-user" class="info-text"></p>
+              </div>
+            </section>
+
+            <!-- 時間帯設定 -->
+            <section id="time-settings-tab" class="tab-content">
+              <div class="panel">
+                <h2>時間帯設定</h2>
+                <p class="help-text">営業時間と利用可能な時間帯を設定できます</p>
+
+                <div class="form-group">
+                  <label>営業開始時刻</label>
+                  <input id="start-time" type="time" value="09:00" />
+                </div>
+
+                <div class="form-group">
+                  <label>営業終了時刻</label>
+                  <input id="end-time" type="time" value="20:00" />
+                </div>
+
+                <div class="form-group">
+                  <label>時間単位</label>
+                  <select id="time-unit">
+                    <option value="60">1時間単位</option>
+                    <option value="30">30分単位</option>
+                  </select>
+                </div>
+
+                <button id="save-time-settings" class="primary-btn">時間帯設定を保存</button>
+                <p id="time-message" class="message"></p>
+              </div>
+            </section>
+
+            <!-- 管理者管理 -->
+            <section id="admins-tab" class="tab-content">
+              <div class="panel">
+                <h2>管理者管理</h2>
+                
+                <div class="section-group">
+                  <h3>新規管理者を追加</h3>
+                  <div class="form-group">
+                    <label>学籍番号</label>
+                    <input id="new-admin-id" type="text" placeholder="例: T225108" />
+                  </div>
+                  <div class="form-group">
+                    <label>パスワード</label>
+                    <input id="new-admin-password" type="password" placeholder="••••••••" />
+                  </div>
+                  <button id="add-admin-btn" class="primary-btn">管理者を追加</button>
+                  <p id="admin-add-message" class="message"></p>
+                </div>
+
+                <div class="section-group">
+                  <h3>登録済み管理者</h3>
+                  <ul id="admin-list" class="admin-list"></ul>
+                </div>
+              </div>
+            </section>
+
+            <!-- ユーザー認証 -->
+            <section id="users-tab" class="tab-content">
+              <div class="panel">
+                <h2>ユーザー認証</h2>
+                <p class="help-text">バンド/ユーザーの登録と管理を行います</p>
+
+                <div class="section-group">
+                  <h3>新規ユーザーを登録</h3>
+                  <div class="form-group">
+                    <label>バンド名</label>
+                    <input id="new-user-name" type="text" placeholder="例: Sunset Echo" />
+                  </div>
+                  <div class="form-group">
+                    <label>メールアドレス</label>
+                    <input id="new-user-email" type="email" placeholder="example@mail.com" />
+                  </div>
+                  <div class="form-group">
+                    <label>認証コード（自動生成）</label>
+                    <div style="display: flex; gap: 10px;">
+                      <input id="new-user-code" type="text" placeholder="自動生成されます" disabled />
+                      <button type="button" id="generate-code-btn" class="secondary-btn">生成</button>
+                    </div>
+                  </div>
+                  <button id="register-user-btn" class="primary-btn">ユーザーを登録</button>
+                  <p id="user-register-message" class="message"></p>
+                </div>
+
+                <div class="section-group">
+                  <h3>登録済みユーザー</h3>
+                  <ul id="user-list" class="user-list"></ul>
+                </div>
+              </div>
+            </section>
+
+            <!-- 予約管理 -->
+            <section id="bookings-tab" class="tab-content">
+              <div class="panel">
+                <h2>予約管理</h2>
+                
+                <div class="section-group">
+                  <h3>予約一覧</h3>
+                  <div class="filter-group">
+                    <input id="filter-room" type="text" placeholder="音楽室で検索..." />
+                    <input id="filter-date" type="date" />
+                    <button id="filter-btn" class="secondary-btn">フィルタ</button>
+                  </div>
+                  <ul id="admin-bookings-list" class="bookings-list"></ul>
+                </div>
+              </div>
+            </section>
+          </main>
+        </div>
+      </div>
+
+      <!-- ユーザー予約画面 -->
+      <div id="user-screen" class="screen">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Reservation System</p>
+            <h1>音楽室予約サイト</h1>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <span id="user-info" class="badge"></span>
+            <button id="user-logout-btn" class="logout-btn">ログアウト</button>
+          </div>
+        </header>
+
+        <main class="layout">
+          <section class="panel form-panel">
+            <h2>新規予約</h2>
+
+            <form id="reservation-form">
+              <div class="field">
+                <label for="band-name">バンド名</label>
+                <select id="band-name" required>
                   <option value="">選択してください</option>
-                  <option value="Room A">Room A</option>
-                  <option value="Room B">Room B</option>
-                  <option value="Room C">Room C</option>
                 </select>
               </div>
 
-              <div class="field">
-                <label for="day">日付</label>
-                <input id="day" name="day" type="date" required />
+              <div class="field-row">
+                <div class="field">
+                  <label for="room">音楽室</label>
+                  <select id="room" required>
+                    <option value="">選択してください</option>
+                    <option value="Room A">Room A</option>
+                    <option value="Room B">Room B</option>
+                    <option value="Room C">Room C</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="day">日付</label>
+                  <input id="day" type="date" required />
+                </div>
               </div>
-            </div>
 
-            <div class="field">
-              <label for="time">時間帯</label>
-              <select id="time" name="time" required>
-                <option value="">選択してください</option>
-                <option value="09:00">09:00</option>
-                <option value="10:00">10:00</option>
-                <option value="11:00">11:00</option>
-                <option value="12:00">12:00</option>
-                <option value="13:00">13:00</option>
-                <option value="14:00">14:00</option>
-                <option value="15:00">15:00</option>
-                <option value="16:00">16:00</option>
-                <option value="17:00">17:00</option>
-                <option value="18:00">18:00</option>
-                <option value="19:00">19:00</option>
-                <option value="20:00">20:00</option>
-              </select>
-            </div>
+              <div class="field">
+                <label for="time">時間帯</label>
+                <select id="time" required>
+                  <option value="">選択してください</option>
+                </select>
+              </div>
 
-            <button type="submit" class="primary-btn">予約する</button>
-          </form>
+              <button type="submit" class="primary-btn">予約する</button>
+            </form>
 
-          <p id="message" class="message" aria-live="polite"></p>
+            <p id="message" class="message" aria-live="polite"></p>
+          </section>
+
+          <section class="panel schedule-panel">
+            <h2>予約状況</h2>
+            <div id="schedule" class="schedule"></div>
+          </section>
+        </main>
+
+        <section class="panel list-panel">
+          <h2>予約一覧</h2>
+          <ul id="booking-list" class="booking-list"></ul>
         </section>
-
-        <section class="panel schedule-panel">
-          <h2>予約状況</h2>
-          <div id="schedule" class="schedule"></div>
-        </section>
-      </main>
-
-      <section class="panel list-panel">
-        <h2>予約一覧</h2>
-        <ul id="booking-list" class="booking-list"></ul>
-      </section>
+      </div>
     </div>
 
     <script src="app.js"></script>

@@ -8,15 +8,16 @@
   </head>
   <body>
     <div class="app-shell">
+      <!-- ログイン画面 -->
       <div id="login-screen" class="screen active">
         <div class="login-container">
-          <div class="login-box" id="login-box">
+          <div id="login-box" class="login-box">
             <h1>音楽室予約システム</h1>
             <p class="login-subtitle">ログイン</p>
 
             <div class="login-tabs">
-              <button class="login-tab active" data-mode="user" type="button">ユーザーログイン</button>
-              <button class="login-tab" data-mode="admin" type="button">管理者ログイン</button>
+              <button class="login-tab active" type="button" data-mode="user">ユーザーログイン</button>
+              <button class="login-tab" type="button" data-mode="admin">管理者ログイン</button>
             </div>
 
             <form id="user-login-form" class="auth-form">
@@ -31,7 +32,7 @@
               <button type="submit" class="primary-btn">ログイン</button>
             </form>
 
-            <form id="admin-login-form" class="auth-form" style="display: none;">
+            <form id="admin-login-form" class="auth-form" style="display:none;">
               <div class="field">
                 <label for="admin-id">学籍番号</label>
                 <input id="admin-id" type="text" placeholder="T225107" required />
@@ -51,7 +52,7 @@
             </div>
           </div>
 
-          <div id="register-box" class="login-box" style="display: none;">
+          <div id="register-box" class="login-box" style="display:none;">
             <h1>新規登録</h1>
             <p class="login-subtitle">アカウントを作成してください</p>
 
@@ -82,13 +83,14 @@
         </div>
       </div>
 
+      <!-- 管理者ダッシュボード -->
       <div id="admin-screen" class="screen">
         <header class="topbar">
           <div>
             <p class="eyebrow">Admin Panel</p>
             <h1>管理者ダッシュボード</h1>
           </div>
-          <button id="logout-btn" class="logout-btn">ログアウト</button>
+          <button id="logout-btn" class="logout-btn" type="button">ログアウト</button>
         </header>
 
         <div class="admin-layout">
@@ -228,6 +230,7 @@
         </div>
       </div>
 
+      <!-- ユーザー画面 -->
       <div id="user-screen" class="screen">
         <header class="topbar">
           <div>
